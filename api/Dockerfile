@@ -2,7 +2,7 @@ FROM python:3.11
 
 WORKDIR /api
 
-RUN apiuser -ms /bin/bash myuser
+RUN useradd -ms /bin/bash apiuser
 USER apiuser
 
 COPY pizzaApi.py .

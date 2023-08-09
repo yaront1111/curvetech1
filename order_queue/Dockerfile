@@ -2,7 +2,7 @@ FROM python:3.11.5
 
 WORKDIR /queue
 
-RUN appuser -ms /bin/bash myuser
+RUN apiuser -ms /bin/bash appuser
 USER appuser
 
 COPY queue_worker.py .
