@@ -39,7 +39,7 @@ jobs:
     - name: Build and push API image
       uses: docker/build-push-action@v2
       with:
-        context: api/Dockerfile
+        context: api
         push: true
         tags: yaront111/hiredscorehw123/api:latest
 
@@ -47,6 +47,6 @@ jobs:
     - name: Build and push Queue image
       uses: docker/build-push-action@v2
       with:
-        context: order_queue/Dockerfile
+        context: order_queue
         push: true
         tags: yaront111/hiredscorehw123/queue:latest
