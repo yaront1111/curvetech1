@@ -11,7 +11,10 @@ class Config:
     RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD", "password")
     MONGO_USERNAME = os.environ.get('MONGODB_USERNAME', 'user')
     MONGO_PASSWORD = os.environ.get('MONGODB_PASSWORD', 'password')
-    MONGO_URL = f'mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@pizza-ordering-mongodb:27017/pizza_db'
+    MONGO_URL = (
+        f'mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}'
+        '@pizza-ordering-mongodb:27017/pizza_db'
+    )
 
 
 # Logging
