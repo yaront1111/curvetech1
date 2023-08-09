@@ -31,7 +31,7 @@ jobs:
       with:
         context: api
         push: true
-        tags: yaront111/hiredscorehw123/api:latest
+        tags: yaront111/hiredscorehw123-api:latest
 
     # Build and push Queue Docker image
     - name: Build and push Queue image
@@ -39,4 +39,4 @@ jobs:
       with:
         context: order_queue
         push: true
-        tags: yaront111/hiredscorehw123/queue:latest
+        tags: yaront111/hiredscorehw123-queue:latest
