@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue
+  labels:
+    app: queue
+spec:
+  replicas: {{ .Values.queue.replicaCount }}
+  selector:
+    matchLabels:
+      app: queue
+  template:
+    metadata:
+      labels:
+        app: queue
+    spec:
+      containers:
+      - name: queue
+        image: "{{ .Values.queue.image.repository }}:{{ .Values.queue.image.tag }}"
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "64Mi"
+          limits:
+            cpu: "500m"
+            memory: "128Mi"
+        env:
+        - name: RABBITMQ_URL
+          value: "{{ .Values.rabbitmq.host | default 'my-rabbitmq' }}"
+        - name: MONGODB_USERNAME
+          value: "{{ .Values.mongodb.mongodbUsername }}"
+        - name: MONGODB_PASSWORD
+          value: "{{ .Values.mongodb.mongodbPassword }}"
+        - name: MONGO_URL
+          value: "mongodb://{{ .Values.mongodb.mongodbUsername }}:{{ .Values.mongodb.mongodbPassword }}@my-mongodb:27017/pizza_db"
