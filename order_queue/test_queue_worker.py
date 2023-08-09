@@ -6,21 +6,23 @@ from order_queue.queue_worker import process_order, callback
 
 class TestQueueWorker(unittest.TestCase):
 
-    @patch('order_queue.queue_worker.MongoClient')
-    def test_process_order_valid(self, mock_mongo_client):
-        mock_collection = MagicMock()
-        mock_mongo_client.return_value.pizza_orders_db.orders = mock_collection
+    @patch('order_queue.queue_worker.orders_collection')
+    def test_process_order_valid(self, mock_orders_collection):
+        mock_insert_one = MagicMock()
+        mock_orders_collection.insert_one = mock_insert_one
 
         order_message = {'pizza-type': 'margherita', 'size': 'personal', 'amount': 2}
         process_order(order_message)
-        mock_collection.insert_one.assert_called_with({
-            'pizza_type': 'margherita', 'size': 'personal', 'amount': 2})
 
-    @patch('pymongo.MongoClient')
-    def test_process_order_invalid_type(self, mock_mongo_client):
-        order_message = {'pizza-type': 'margherita', 'size': 'personal', 'amount': '2'}  # Invalid type for amount
-        with self.assertRaises(Exception):
-            process_order(order_message)
+        # Verify that insert_one was called with the expected data
+        order_data = {"pizza_type": order_message['pizza-type'], "size": order_message['size'], "amount": order_message['amount']}
+        mock_insert_one.assert_called_once_with(order_data)
+
+        @patch('pymongo.MongoClient')
+        def test_process_order_invalid_type(self, mock_mongo_client):
+            order_message = {'pizza-type': 'margherita', 'size': 'personal', 'amount': '2'}  # Invalid type for amount
+            with self.assertRaises(Exception):
+                process_order(order_message)
 
     @patch('order_queue.queue_worker.process_order')
     def test_callback_valid_message(self, mock_process_order):
