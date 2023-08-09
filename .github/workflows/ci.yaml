@@ -26,9 +26,11 @@ jobs:
         flake8 api/pizzaApi.py order_queue/queue_worker.py
 
     # Run pytest
+    - name: Add directory to Python path
+      run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+
     - name: Run tests
-      run: |
-        pytest api/test_pizzaApi.py order_queue/test_queue_worker.py
+      run: pytest api/test_pizzaApi.py order_queue/test_queue_worker.py
 
     # Set up Docker
     - name: Set up Docker
