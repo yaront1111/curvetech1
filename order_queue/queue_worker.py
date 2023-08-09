@@ -54,13 +54,17 @@ def callback(ch, method, properties, body):
         ch.basic_ack(delivery_tag=method.delivery_tag)
     except Exception as e:
         logger.error(f"Failed to process message: {e}")
-        # TODO: dead-letter queue
+        # TODO: handle in a dead-letter queue
 
 
 # Main function
 def main():
-    credentials = pika.PlainCredentials(Config.RABBITMQ_USERNAME, Config.RABBITMQ_PASSWORD)
-    connection_params = pika.ConnectionParameters(Config.RABBITMQ_URL, credentials=credentials)
+    credentials = pika.PlainCredentials(
+        Config.RABBITMQ_USERNAME, Config.RABBITMQ_PASSWORD
+    )
+    connection_params = pika.ConnectionParameters(
+        Config.RABBITMQ_URL, credentials=credentials
+    )
     connection = pika.BlockingConnection(connection_params)
     channel = connection.channel()
     channel.queue_declare(queue='pizza_orders')
