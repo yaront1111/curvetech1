@@ -82,9 +82,6 @@ def health():
 
 @app.route("/order", methods=["POST"])
 def order():
-    if __name__ == "__main__":
-        app.run(host="0.0.0.0", port=5000, debug=True)
-
     try:
         auth_header = request.headers.get("Authorization")
         token = auth_header.split(" ")[1] if auth_header else None
