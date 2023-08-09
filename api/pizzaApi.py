@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 SERVICE_SECRET_KEY = os.environ.get("SERVICE_SECRET_KEY")
-RABBITMQ_URL = os.environ.get("RABBITMQ_URL", "rabbitmq-service")
+RABBITMQ_URL = os.environ.get("RABBITMQ_URL", "my-rabbitmq")
 
 @app.route("/health", methods=["GET"])
 def health():
@@ -18,7 +18,7 @@ def health():
 
 def check_database_connection():
     try:
-        # Perform a database connection check
+
         return "OK"
     except Exception as e:
         app.logger.error(f"Database check failed: {e}")
