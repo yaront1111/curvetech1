@@ -7,12 +7,12 @@ from pymongo import MongoClient
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-RABBITMQ_URL = os.environ.get("RABBITMQ_URL", "my-rabbitmq")
+RABBITMQ_URL = os.environ.get("RABBITMQ_URL", "pizza-ordering-rabbitmq")
 RABBITMQ_USERNAME = os.environ.get("RABBITMQ_USERNAME", "user")
 RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD", "password")
 MONGO_USERNAME = os.environ.get('MONGODB_USERNAME', 'user')
 MONGO_PASSWORD = os.environ.get('MONGODB_PASSWORD', 'password')
-MONGO_URL = f'mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@my-mongodb:27017/pizza_db'
+MONGO_URL = f'mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@pizza-ordering-mongodb:27017/pizza_db'
 client = MongoClient(MONGO_URL)
 db = client['pizza_db']
 orders_collection = db['orders']

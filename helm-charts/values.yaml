@@ -22,7 +22,7 @@ queue:
     tag: latest
 
 rabbitmq:
-  host: my-rabbitmq
+  host: pizza-ordering-rabbitmq
   replicaCount: 1
   auth:
     username: user
