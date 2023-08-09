@@ -6,5 +6,6 @@ spec:
   type: {{ .Values.api.service.type }}
   ports:
     - port: {{ .Values.api.service.port }}
+      targetPort: 5000
   selector:
     app: api

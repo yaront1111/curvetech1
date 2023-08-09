@@ -17,40 +17,15 @@ Access to Docker Hub or another container registry if not using public images
 Configuration
 helm-charts/values.yaml
 
-Installation
-Using Helm CLI
-Clone the repository.
-https://github.com/yaront1111/HiredscoreHw.git
 
-Navigate to the Helm chart directory.
+Running
 
-Install the Helm chart with:
+minikube start
 
-helm install my-release-name .
+kubectl create namespace pizzaapi
 
+kubectl apply -f k8s/secrets.yaml -n pizzaapi
 
-on:
-  push:
-    branches:
-      - main
+helm dependency update
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Helm
-      uses: azure/setup-helm@v1
-      with:
-        version: '3.x'
-
-    - name: Deploy with Helm
-      run: |
-        helm install my-release-name .
-Make sure to adjust paths, chart names, and any necessary authentication for your specific registry or cluster.
-
-Accessing the API
-With a local Minikube setup and configured ingress, you can access the API at http://127.0.0.1.
+pizzaapi

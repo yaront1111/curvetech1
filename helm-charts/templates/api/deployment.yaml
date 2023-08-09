@@ -18,7 +18,7 @@ spec:
       - name: api
         image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
         ports:
-        - containerPort: 80
+        - containerPort: 5000
         resources:
           requests:
             cpu: "250m"
@@ -43,12 +43,12 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: 80
+            port: 5000
           initialDelaySeconds: 15
           periodSeconds: 10
         readinessProbe:
           httpGet:
             path: /health
-            port: 80
+            port: 5000
           initialDelaySeconds: 5
           periodSeconds: 10

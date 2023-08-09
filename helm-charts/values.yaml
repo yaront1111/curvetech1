@@ -5,7 +5,7 @@ api:
     maxReplicas: 5
     cpuUtilization: 50
   service:
-    type: ClusterIP
+    type: NodePort
     port: 80
   image:
     repository: yaront111/hiredscorehw123-api
