@@ -18,7 +18,7 @@ queue:
     maxReplicas: 5
     cpuUtilization: 50
   image:
-    repository: yaront111/hiredscorehw123-api-queue
+    repository: yaront111/hiredscorehw123-queue
     tag: latest
 
 rabbitmq:
