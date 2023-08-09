@@ -27,7 +27,7 @@ def process_order(order_message):
 
         # Connect to MongoDB
         client = MongoClient(MONGO_URL)
-        db = client.pizza_orders_db
+        db = client.pizza_db
         collection = db.orders
 
         # Insert the order into the MongoDB collection

@@ -25,7 +25,7 @@ def health():
 def check_database_connection():
     try:
         # Construct the connection string
-        connection_string = f"mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_URL}"
+        connection_string = MONGO_URL
         client = MongoClient(connection_string)
         client.admin.command('ismaster')
 
@@ -37,13 +37,18 @@ def check_database_connection():
 def check_message_queue():
     try:
         credentials = pika.PlainCredentials(RABBITMQ_USERNAME, RABBITMQ_PASSWORD)
-        connection_params = pika.ConnectionParameters(RABBITMQ_URL, credentials=credentials)
+        connection_params = pika.ConnectionParameters(
+            host=RABBITMQ_URL,
+            port=5672,
+            credentials=credentials
+        )
         connection = pika.BlockingConnection(connection_params)
         connection.close()
         return "OK"
     except Exception as e:
         app.logger.error(f"Message queue check failed: {e}")
         return "ERROR"
+
 
 def verify_service_token(token):
     try:
