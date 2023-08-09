@@ -8,6 +8,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 RABBITMQ_URL = os.environ.get("RABBITMQ_URL", "my-rabbitmq")
+RABBITMQ_USERNAME = os.environ.get("RABBITMQ_USERNAME", "user")
+RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD", "password")
 MONGO_USERNAME = os.environ.get('MONGODB_USERNAME', 'user')
 MONGO_PASSWORD = os.environ.get('MONGODB_PASSWORD', 'password')
 MONGO_URL = f'mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@my-mongodb:27017/pizza_db'
@@ -51,7 +53,9 @@ def callback(ch, method, properties, body):
         #TODO dead-letter queue
 
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(RABBITMQ_URL))
+    credentials = pika.PlainCredentials(RABBITMQ_USERNAME, RABBITMQ_PASSWORD)
+    connection_params = pika.ConnectionParameters(RABBITMQ_URL, credentials=credentials)
+    connection = pika.BlockingConnection(connection_params)
     channel = connection.channel()
 
     channel.queue_declare(queue='pizza_orders')
@@ -60,6 +64,7 @@ def main():
 
     logger.info('Waiting for messages. To exit press CTRL+C')
     channel.start_consuming()
+
 
 if __name__ == '__main__':
     main()
