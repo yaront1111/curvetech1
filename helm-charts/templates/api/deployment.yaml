@@ -28,7 +28,7 @@ spec:
             memory: "128Mi"
         env:
         - name: RABBITMQ_URL
-          value: "amqp://pizza-ordering-rabbitmq.pizzaapi.svc.cluster.local"
+          value: "pizza-ordering-rabbitmq"
         - name: RABBITMQ_USERNAME
           value: "{{ .Values.rabbitmq.auth.username }}"
         - name: RABBITMQ_PASSWORD
