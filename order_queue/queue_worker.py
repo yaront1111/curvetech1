@@ -4,6 +4,7 @@ import json
 import os
 from pymongo import MongoClient
 
+
 # Configuration
 class Config:
     RABBITMQ_URL = os.environ.get("RABBITMQ_URL", "pizza-ordering-rabbitmq")
@@ -21,6 +22,7 @@ class Config:
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 # Database connection
 client = MongoClient(Config.MONGO_URL)
 db = client['pizza_db']
@@ -34,7 +36,10 @@ def process_order(order_message):
         pizza_type = order_message['pizza-type']
         size = order_message['size']
         amount = order_message['amount']
-        logger.info(f"Processing order: {pizza_type} - {size} - {amount}")
+        log_message = (
+            f"Processing order: {pizza_type} - {size} - {amount}"
+        )
+        logger.info(log_message)
 
         # Insert the order into MongoDB
         order_data = {"pizza_type": pizza_type, "size": size, "amount": amount}
