@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import pika
 import jwt
+from pymongo import MongoClient
 from jwt.exceptions import InvalidTokenError
 import os
 
@@ -8,6 +9,11 @@ app = Flask(__name__)
 
 SERVICE_SECRET_KEY = os.environ.get("SERVICE_SECRET_KEY")
 RABBITMQ_URL = os.environ.get("RABBITMQ_URL", "my-rabbitmq")
+RABBITMQ_USERNAME = os.environ.get("RABBITMQ_USERNAME", "user")
+RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD", "password")
+MONGO_USERNAME = os.environ.get('MONGODB_USERNAME', 'user')
+MONGO_PASSWORD = os.environ.get('MONGODB_PASSWORD', 'password')
+MONGO_URL = f'mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@my-mongodb:27017/pizza_db'
 
 @app.route("/health", methods=["GET"])
 def health():
@@ -18,6 +24,10 @@ def health():
 
 def check_database_connection():
     try:
+        # Construct the connection string
+        connection_string = f"mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_URL}"
+        client = MongoClient(connection_string)
+        client.admin.command('ismaster')
 
         return "OK"
     except Exception as e:
@@ -26,8 +36,9 @@ def check_database_connection():
 
 def check_message_queue():
     try:
-        parameters = pika.ConnectionParameters(RABBITMQ_URL)
-        connection = pika.BlockingConnection(parameters)
+        credentials = pika.PlainCredentials(RABBITMQ_USERNAME, RABBITMQ_PASSWORD)
+        connection_params = pika.ConnectionParameters(RABBITMQ_URL, credentials=credentials)
+        connection = pika.BlockingConnection(connection_params)
         connection.close()
         return "OK"
     except Exception as e:
