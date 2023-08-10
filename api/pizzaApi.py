@@ -61,9 +61,14 @@ def verify_service_token(token):
 
 
 def add_order_to_queue(order):
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host=app.config['RABBITMQ_URL'])
+    credentials = pika.PlainCredentials(
+        app.config['RABBITMQ_USERNAME'], app.config['RABBITMQ_PASSWORD']
     )
+    connection_params = pika.ConnectionParameters(
+        host=app.config['RABBITMQ_URL'], credentials=credentials
+    )
+
+    connection = pika.BlockingConnection(connection_params)
     channel = connection.channel()
     channel.queue_declare(queue='pizza_orders')
     channel.basic_publish(
