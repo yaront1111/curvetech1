@@ -116,7 +116,7 @@ def order():
         return jsonify(status="Order received"), 200
     except Exception as e:
         app.logger.error(f"Order processing failed: {e}")
-        return jsonify(error="Internal server error"), 500
+        return jsonify(error=f"Internal server error {e}"), 500
 
 
 if __name__ == "__main__":
