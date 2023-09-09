@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: curvetech-deployment-pipeline-run
+spec:
+  pipelineRef:
+    name: curvetech-deployment-pipeline
+  workspaces:
+    - name: shared-data
+      emptyDir: {}
+  params:
+    - name: cluster-name
+      value: "curvetechcluster"

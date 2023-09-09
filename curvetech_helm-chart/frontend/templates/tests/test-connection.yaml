@@ -1,0 +1,16 @@
+{{- if .Values.testConnection.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-connection
+spec:
+  containers:
+  - name: test-connection
+    image: my-test-image
+    readinessProbe:
+      httpGet:
+        path: "/ready"
+        port: 80
+      initialDelaySeconds: {{ .Values.testConnection.initialDelaySeconds }}
+      periodSeconds: {{ .Values.testConnection.periodSeconds }}
+{{- end }}

@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: configure-kubectl
+spec:
+  workspaces:
+    - name: terraform-output
+  steps:
+    - name: apply-kubeconfig
+      image: bitnami/kubectl:latest
+      script: |
+        #!/usr/bin/env bash
+        cp $(workspaces.terraform-output.path)/kubeconfig ~/.kube/config

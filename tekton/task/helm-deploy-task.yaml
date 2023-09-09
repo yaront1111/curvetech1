@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: helm-deploy
+spec:
+  params:
+    - name: chartPath
+      description: The path to the helm chart
+  steps:
+    - name: helm-install-or-upgrade
+      image: alpine/helm:latest
+      script: |
+        #!/bin/sh
+        helm upgrade --install $(params.chartPath)

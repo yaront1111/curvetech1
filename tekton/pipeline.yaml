@@ -1,0 +1,56 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: curvetech-deployment-pipeline
+spec:
+  workspaces:
+    - name: shared-data  # This workspace will be used to share data and files between tasks
+  params:
+    - name: cluster-name
+      type: string
+      description: The EKS cluster name to use.
+  tasks:
+    - name: docker-build
+      taskRef:
+        name: docker-build-task
+      workspaces:
+        - name: shared-data
+          workspace: shared-data
+
+    - name: terraform-apply
+      taskRef:
+        name: terraform-apply-task
+      workspaces:
+        - name: shared-data
+          workspace: shared-data
+
+    - name: configure-kubectl
+      taskRef:
+        name: configure-kubectl-task
+      workspaces:
+        - name: shared-data
+          workspace: shared-data
+
+    - name: helm-deploy-backend
+      taskRef:
+        name: helm-deploy-task
+      workspaces:
+        - name: shared-data
+          workspace: shared-data
+      params:
+        - name: chart-path
+          value: "./curvetech_terraform/backend/Chart.yaml"
+        - name: release-name
+          value: "backend-release"
+
+    - name: helm-deploy-frontend
+      taskRef:
+        name: helm-deploy-task
+      workspaces:
+        - name: shared-data
+          workspace: shared-data
+      params:
+        - name: chart-path
+           value: "./curvetech_terraform/frontend/Chart.yaml"
+        - name: release-name
+          value: "frontend-release"

@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: terraform-apply
+spec:
+  workspaces:
+    - name: terraform-output
+  steps:
+    - name: apply
+      image: hashicorp/terraform:0.14.0
+      script: |
+        #!/usr/bin/env bash
+        terraform init
+        terraform apply -auto-approve
+        terraform output -raw kubeconfig > $(workspaces.terraform-output.path)/kubeconfig

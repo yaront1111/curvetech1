@@ -1,0 +1,40 @@
+# Basic setup for our frontend service
+replicaCount: 1
+image:
+  repository: yaront111/curvetechapp-api:latest
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Where to deploy our service within the cluster
+nodeSelector:
+  NodeGroup: "Microservices"
+
+# Just keeping these empty for now, we may need them later
+tolerations: []
+affinity: {}
+
+# Expose the service on port 80
+service:
+  type: LoadBalancer
+  port: 80
+
+serviceAccount:
+  create: true
+  name: curvetech-frontend-account
+
+# We'll be using ingress
+ingress:
+  enabled: true
+
+# Let's enable auto-scaling
+hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+# Basic checks to ensure our service is running smoothly
+testConnection:
+  enabled: false
+  initialDelaySeconds: 5
+  periodSeconds: 5

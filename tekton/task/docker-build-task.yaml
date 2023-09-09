@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-docker-image
+spec:
+  params:
+    - name: pathToDockerFile
+      type: string
+      description: The path to the Dockerfile to execute
+    - name: pathToContext
+      type: string
+      default: "."
+      description: The build context used by Kaniko
+    - name: imageName
+      type: string
+      description: Name of the image to be built
+  steps:
+    - name: build-and-push
+      image: gcr.io/kaniko-project/executor:v1.6.0
+      args:
+        - --dockerfile=$(params.pathToDockerFile)
+        - --destination=$(params.imageName)
+        - --context=$(params.pathToContext)

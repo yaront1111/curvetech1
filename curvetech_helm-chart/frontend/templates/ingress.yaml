@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "frontend.fullname" . }}
+  annotations:
+    nginx.ingress.kubernetes.io/add-base-url: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "x-host: $host";
+  labels:
+    {{- include "frontend.labels" . | nindent 4 }}
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "frontend.fullname" . }}
+            port:
+              number: {{ .Values.service.port }}
